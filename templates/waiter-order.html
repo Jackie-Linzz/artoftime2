@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+	<meta charset="utf-8" />
+
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+
+	
+	<link rel="stylesheet" type="text/css" href="waiter-order.css">
+
+	
+	<link rel="stylesheet" type="text/css" href="{{static_url("css/waiter-order-mobile.css")}}" id="css">
+
+    </head>
+
+    <body>
+	<div class="header">
+	    <div class="heading"><input type="text" id="desk"></div>
+	    <div class="back">返回</div>
+	</div>
+	<div class="content">
+	    <table border="0">
+		<tr>
+		    <td>编号：</td>
+		    <td><input type="text" id="did"></td>
+		</tr>
+		<tr>
+		    <td>特殊要求：</td>
+		    <td><input type="text" id="demand"></td>
+		</tr>
+		<tr>
+		    <td colspan="2"><div id="submit">添加</div></td>
+		</tr>
+        <tr>
+            <td colspan="2"><div id="submit2">连续</div></td>
+        </tr>
+	    </table>
+	    <div class="msg">缺单</div>
+	    <div class="bar">显示/隐藏</div>
+	    <div class="orders">
+		<div class="item one">
+		    <div class="row">
+			<div class="name">名字</div><div class="price">18.0</div><div class="num">0</div>
+		    </div>
+		    <div class="row">
+			<div class="demand">这是特殊要求</div>
+		    </div>
+		    <div class="row">
+			<div class="button">-</div>
+		    </div>
+		</div>
+		<div class="item one">
+		    <div class="row">
+			<div class="name">名字</div><div class="price">18.0</div><div class="num">0</div>
+		    </div>
+		    <div class="row">
+			<div class="demand">这是特殊要求</div>
+		    </div>
+		    <div class="row">
+			<div class="button">-</div>
+		    </div>
+		</div>
+		<div class="item total">
+		    <div class="row">
+			<div class="name">共</div><div class="price">0</div><div class="num">0</div>
+		    </div>
+		</div>
+		<textarea class="gdemand" placeholder="general demand" rows="3"></textarea>
+	    </div>
+	    <div class="submit">下单</div>
+	</div>
+	
+	
+	<script src="{{static_url("js/jquery-1.11.2.min.js")}}"></script>
+	<!-- <script src="{{static_url("js/jquery.mobile.custom.min.js")}}"></script> -->
+	<script src="{{static_url("js/base.js")}}"></script>
+	<script src="{{static_url("js/waiter-order.js")}}"></script>
+    </body>
+</html>
+<html>
+ 

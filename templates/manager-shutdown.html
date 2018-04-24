@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+	<meta charset="utf-8" />
+
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+
+	
+	<link rel="stylesheet" type="text/css" href="manager-shutdown.css">
+	
+	<link rel="stylesheet" type="text/css" href="{{static_url("css/manager-shutdown.css")}}" id="css">
+	
+
+    </head>
+
+    <body>
+	<div class="menu">
+	    <div class="back">返回</div>
+	    <div class="head">关机</div>
+	    <div class="desk-container">
+		<div class="op op-shutdown">关机</div>
+		<div class="op op-reboot">重启</div>
+	    </div>
+	</div>
+
+	<div class="content">
+	    <div class="shutdown">
+		<div class="button">关机</div>
+	    </div>
+	    <div class="reboot">
+		<div class="button">重启</div>
+	    </div>
+	</div>
+	
+	
+	
+	<script src="{{static_url("js/jquery-1.11.2.min.js")}}"></script>
+	<!-- <script src="{{static_url("js/jquery.mobile.custom.min.js")}}"></script> -->
+	<script src="{{static_url("js/base.js")}}"></script>
+	<script src="{{static_url("js/manager-shutdown.js")}}"></script>
+    </body>
+</html>

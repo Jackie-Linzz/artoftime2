@@ -1,0 +1,86 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+body {
+    background-color: #ffc;
+}
+
+.content {
+    padding: 200px 0;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 0;
+    font-size: 60px;
+    background-color: #9cf;
+}
+.heading {
+    color: white;
+    font-size: 60px;
+    
+    text-align: center;
+}
+.back {
+    position: absolute;
+    left: 15px;
+    top: 20px;
+    font-size: 50px;
+    
+    padding: 0px 10px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 8px;
+}
+
+div {
+    padding: 60px 0;
+    font-size: 50px;
+    
+    color: white;
+    text-align: center;
+}
+.num {
+    display: inline;
+}
+.order {
+    
+    background-color: #f17c67;
+}
+.receive {
+    background-color: #2e68aa;
+}
+.pass {
+    background-color: #9cf;
+}
+.request {
+    
+    background-color: #495a80;
+}
+.feedback {
+   
+    background-color: #2e68aa;
+}
+.mask {
+    background-color: #1db0b8;
+}
+.clean {
+    background-color: #376956;
+}
+.query {
+    background-color: #1db0b8;
+}
+.queue {
+    background-color: #2e68aa;
+}
+.passwd {
+    
+    background-color: #9cf;
+}

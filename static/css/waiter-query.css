@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 0;
+    background-color: #9cf;
+}
+.heading {
+    color: white;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+}
+.back {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 18px;
+    line-height: 18px;
+    padding: 3px 10px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 4px;
+}
+.content {
+    padding: 60px 0;
+}
+table {
+    margin: 0 auto;
+}
+caption {
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+td {
+    min-width: 100px;
+    text-align: center;
+}

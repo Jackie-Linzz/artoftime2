@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+	<meta charset="utf-8" />
+
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+
+	
+	<link rel="stylesheet" type="text/css" href="manager-company.css">
+	
+	<link rel="stylesheet" type="text/css" href="{{static_url("css/manager-company.css")}}" id="css">
+	
+
+    </head>
+
+    <body>
+	<h3>公司信息</h3>
+	<div class="container">
+	    <h4>公司名称：</h4>
+	    <input type="text" required="required" id="company">
+	    <h4>店名：</h4>
+	    <input type="text" required="required" id="shop">
+	    <h4>地址：</h4>
+	    <input type="text" required="required" id="location">
+        <h4>营业时间(例如：10:00-22:00)</h4>
+        <input type="text" required="required" id="time">
+	    <h4>页面标题</h4>
+	    <input type="text" required="required" id="heading">
+	    <h4>欢迎信息</h4>
+	    <textarea id="welcome"></textarea>
+	    <h4>公司介绍</h4>
+	    <textarea rows="5" id="desp"></textarea>
+	    <div class="button">确定</div>
+	    <div class="back">返回</div>
+	</div>
+	
+	
+	
+	<script src="{{static_url("js/jquery-1.11.2.min.js")}}"></script>
+	<!-- <script src="{{static_url("js/jquery.mobile.custom.min.js")}}"></script> -->
+	<script src="{{static_url("js/base.js")}}"></script>
+	<script src="{{static_url("js/manager-company.js")}}"></script>
+    </body>
+</html>

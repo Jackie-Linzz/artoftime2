@@ -1,0 +1,164 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.head {
+    font-size: 46px;
+    color: white;
+}
+.head div {
+    display: inline-block;
+    padding: 20px 0;
+    text-align: center;
+}
+.head .back {
+    width: 10%;
+    background-color: #2a8fbd;
+}
+#select {
+    width: 30%;
+    background-color: #00343f;
+}
+#doing {
+    width: 30%;
+    background-color: #1db0b8;
+}
+#done {
+    width: 30%;
+    background-color: #37c6c0;
+}
+.select .button div {
+    display: inline-block;
+    margin: 20px 0;
+    padding: 30px 0;
+    font-size: 46px;
+    color: white;
+    text-align: center;
+}
+.select .button .refuse-button {
+    width: 30%;
+    background-color: #9c9;
+}
+.select .button .prepare-button {
+    width: 40%;
+    background-color: #00343f;
+}
+.select .button .accept-button {
+    width: 30%;
+    background-color: #9cf;
+}
+.select .current {
+    margin: 20px 0;
+    font-size: 46px;
+    text-align: center;
+    color: white;
+    background-color: #9cf;
+    border-radius: 8px;
+}
+.select .current .info {
+    text-align: right;
+}
+.select .current .info div {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+.select .byway .item {
+    position: relative;
+    margin: 20px;
+    color: white;
+    font-size: 46px;
+    background-color: #9c9;
+    border-radius: 8px;
+}
+.select .byway div.selected {
+    background-color: #9cf;
+}
+.select .byway .item .close {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.select .byway .item .title {
+    text-align: center;
+}
+.select .byway .item .info {
+    text-align: right;
+}
+.select .byway .item .info div {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+.select .byway .item .demand {
+    text-align: center;
+}
+.doing .item {
+    position: relative;
+    margin: 20px;
+    padding-bottom: 20px;
+    color: white;
+    font-size: 46px;
+    background-color: #1db0b8;
+    border-radius: 8px;
+}
+.do-all {
+    position: relative;
+    margin: 40px;
+    padding: 20px 0;
+    color: white;
+    font-size: 46px;
+    text-align: center;
+    background-color: #1db0b8;
+    border-radius: 8px;
+}
+.doing .item .close {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.doing .item .title,
+.doing .item .demand {
+    text-align: center;
+}
+.doing .item .info {
+    text-align: right;
+}
+.doing .item .info div {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+.doing .item .finish {
+    position: absolute;
+    bottom: 2px;
+    right: 10px;
+}
+.done .item {
+    position: relative;
+    margin: 20px;
+    color: white;
+    font-size: 46px;
+    background-color: #37c6c0;
+    border-radius: 8px;
+}
+.done .item .title,
+.done .item .demand {
+    text-align: center;
+}
+.done .item .close {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+.done .item .info {
+    text-align: right;
+}
+.done .item .info div {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
