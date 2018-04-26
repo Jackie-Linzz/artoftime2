@@ -23,9 +23,8 @@ $(document).ready(function(){
 function show_num(){
     var orders = myorder.orders;
     var left = myorder.left;
-    var doing = myorder.doing;
-    var done = myorder.done;
-    var all = orders.concat(left, doing, done);
+    
+    var all = orders.concat(left);
     $('.item').each(function(){
 	    var cid = $(this).attr('data-cid');
 	    var num = 0;

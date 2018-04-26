@@ -147,6 +147,7 @@ class Order(object):
         self.pic = t['pic']
         self.desp = t['desp']
         self.demand = demand
+        self.printer = t['printer']
         
         self.uid = global_uid
         #print 'global_uid:',global_uid
@@ -182,44 +183,7 @@ class Order(object):
             #table.stamp = time.time()
             table.set_future()
             
-    def set_doing(self):
-        global tables
-        self.inbyway = 0
-        if self.status == 'left':
-            self.status = 'doing'
-            table = tables.get(self.desk)
-            table.left.remove(self)
-            table.doing.insert(0, self)
-            #table.stamp = time.time()
-            table.set_future()
-        elif self.status == 'doing':
-            pass
-        elif self.status == 'done':
-            self.inbyway = 0
-            self.status = 'doing'
-            table = tables.get(self.desk)
-            table.done.remove(self)
-            table.doing.insert(0, self)
-            #table.stamp = time.time()
-            table.set_future()
-            
-    def set_done(self):
-        global tables
-        self.inbyway = 0
-        if self.status == 'left':
-            self.status = 'done'
-            table = tables.get(self.desk)
-            table.left.remove(self)
-            table.done.insert(0, self)
-            #table.stamp = time.time()
-            table.set_future()
-        elif self.status == 'doing':
-            self.status = 'done'
-            table = tables.get(self.desk)
-            table.doing.remove(self)
-            table.done.insert(0, self)
-            #table.stamp = time.time()
-            table.set_future()
+
 
     def cash_delete(self):
         if self.status == 'left':
@@ -260,8 +224,6 @@ class Table(object):
         self.orders = []
         self.left = []
         
-        self.doing = []
-        self.done = []
         self.cancel = [] #canceled by customer or waiter
 
         self.payed = []
@@ -299,15 +261,10 @@ class Table(object):
         return future
 
     def cash(self, fid):
-        if len(self.left)+len(self.doing) >0:
-            return 'failure'
-        if len(self.done) == 0:
-            return 'failure'
-        self.payed = self.done
+
+        self.payed = self.left
         self.orders = []
         self.left = []
-        self.doing = []
-        self.done = []
         self.cancel = []
         cash_time = time.time()
         for one in self.payed:
@@ -316,10 +273,7 @@ class Table(object):
             mysql.insert('cash_history', {'fid': fid, 'uid': one.uid, 'pid': self.pid, 'status': 'success', 'stamp': cash_time})
             if one.fb is not None:
                 mysql.insert('feedback', {'uid': one.uid, 'fb': one.fb, 'stamp': cash_time})
-        for one in self.delete:
-            one.status = 'delete'
-            one.store()
-            mysql.insert('cash_history', {'fid': fid, 'uid': one.uid, 'pid': self.pid, 'status': 'failure', 'stamp': cash_time})
+        
         # to gprinter
         printer.gprint(self.to_printer())
         self.delete = []
@@ -425,12 +379,13 @@ def customer_ins(desk, ins):
     elif ins[0] == 'g':
         table.gdemand = ins[1]
     elif ins[0] == 'submit':
-        if len(table.left)+len(table.doing)+len(table.done) == 0:
+        if len(table.left) == 0:
             table.submit = time.time()
             table.pid = global_pid
             add_pid()
         for one in table.orders:
             one.status = 'left'
+            one.print()
         table.left = table.left + table.orders
         table.orders = []
         table.left = sorted(table.left, key=lambda one: one.ord)
@@ -487,12 +442,13 @@ def waiter_ins(desk, ins):
     elif ins[0] == 'g':
         table.gdemand = ins[1]
     elif ins[0] == 'submit':
-        if len(table.left)+len(table.doing)+len(table.done) == 0:
+        if len(table.left) == 0:
             table.submit = time.time()
             table.pid = global_pid
             add_pid()
         for one in table.orders:
             one.status = 'left'
+            one.print()
         table.left = table.left + table.orders
         table.orders = []
         table.left = sorted(table.left, key=lambda one: one.ord)
@@ -821,226 +777,6 @@ class Status(object):
 
 statusmsg = Status()
 
-class Cook(object):
-    def __init__(self, fid):
-        self.fid = fid
-        self.name = faculty.get(fid)['name']
-        self.current = None
-        self.byway = []
-        self.doing = []
-        self.done = []
-        #self.deny = []
-        self.cookdo = []
-        self.waiters = set()
-        self.stamp = time.time()
-        self.queue = []
-        #init self.cookdo
-        result = mysql.get('cook_do', {'fid': self.fid})
-        all = False
-        for one in result:
-            if one['did'] == 'all':
-                all = True
-            self.cookdo.append(one['did'])
-        if all:
-            self.cookdo = ['all']
-
-    def ins(self, ins):#waiter-ins remove one when one in byway
-        #ins: accept,refuse,cancel-byway,cancel-doing,done
-        global uids
-        print ins
-        if ins[0] == 'prepare':
-            if self.current is None:
-                self.current = self.select()
-                self.select_byway()
-        if ins[0] == 'accept':
-            if self.current is None:
-                pass               
-            else:
-                
-                items = []
-                items.append(self.current.uid)
-                for one in self.byway:
-                    items.append(one.uid)
-                for uid in items:
-                    uid = int(uid)
-                    one = uids.get(uid)
-                    if one is not None:
-                        one.cook = self.fid
-                        one.cookname = self.name
-                        one.inbyway = 0
-                        one.set_doing()
-                        self.doing.append(one)
-                        if one in self.byway:
-                            self.byway.remove(one)
-                for one in self.byway:
-                    one.inbyway = 0
-                    one.cook = None
-                    one.cookname = None
-                leftmsg.change()
-                self.byway = []
-                #self.deny = []
-                self.current = None
-                
-        elif ins[0] == 'refuse':
-            if self.current is None:
-                pass
-            else:
-                #did = self.current.did
-                #self.deny.append(did)
-                self.current.cook = None
-                self.current.cookname = None
-                self.current.inbyway = 0
-                self.current = None
-                for one in self.byway:
-                    one.cook = None
-                    one.cookname = None
-                    one.inbyway = 0
-                self.byway = []
-        elif ins[0] == 'remove':
-            one = uids.get(ins[1])
-            if one in self.byway:
-                one.cook = None
-                one.cookname = None
-                one.inbyway = 0
-                self.byway.remove(one)
-            if one is self.current:
-                self.current.cook = None
-                self.current.cookname = None
-                self.current.inbyway = 0
-                self.current = None
-                for one in self.byway:
-                    one.cook = None
-                    one.cookname = None
-                    one.inbyway = 0
-                self.byway = []
-                
-        elif ins[0] == 'cancel-byway':
-            uid = ins[1]
-            uid = int(uid)
-            one = uids.get(uid)
-            if one in self.byway:
-                self.byway.remove(one)
-                one.set_left()
-        elif ins[0] == 'cancel-doing':
-            uid = ins[1]
-            one = uids.get(uid)
-            if one in self.doing:
-                self.doing.remove(one)
-                one.set_left()
-                leftmsg.change()
-        elif ins[0] == 'done':
-            items = ins[1:]
-            for uid in items:
-                uid = int(uid)
-                one = uids.get(uid)
-                if one in self.doing:
-                    self.doing.remove(one)
-                    self.done.insert(0, one)
-                    if len(self.done) > 50:
-                        self.done = self.done[0:49]
-                    one.set_done()
-                    #store into cook_history
-                    mysql.insert('cook_history', {'fid': self.fid, 'uid': uid, 'stamp': time.time()})
-                    #insert pass message
-                    passmsg.add(one)
-                    #check feedback request
-                    table = tables.get(one.desk)
-                    table.last = time.time()
-                    if len(table.left)+len(table.doing) == 0:
-                        feedbackmsg.add(one.desk)
-        elif ins[0] == 'done-all':
-            for one in self.doing:    
-                self.done.insert(0, one)
-                if len(self.done) > 50:
-                    self.done = self.done[0:49]
-                one.set_done()
-                #store into cook_history
-                mysql.insert('cook_history', {'fid': self.fid, 'uid': one.uid, 'stamp': time.time()})
-                #insert pass message
-                passmsg.add(one)
-                #check feedback request
-                table = tables.get(one.desk)
-                table.last = time.time()
-                if len(table.left)+len(table.doing) == 0:
-                    feedbackmsg.add(one.desk)
-            self.doing = []
-        self.stamp = time.time()
-        self.set_future()
-        
-    def select(self):
-        # when selecting, consider cookdo and deny
-        global tables
-        current = time.time()
-        #import pdb
-        #pdb.set_trace()
-        left = filter(lambda x: len(x.left)>0, tables.values())
-        for table in left:
-            table.power = (current-table.submit)*0.15+(current-table.last)*0.85
-        left.sort(key=lambda x: x.power, reverse=True)
-        self.queue = left
-        
-        if len(left) == 0:
-            return None
-        else:
-            # select not in byway
-            for table in left:
-                for one in table.left:
-                    if one.who == 'cook' and one.inbyway == 0:
-                        if 'all' in self.cookdo or one.did in self.cookdo:
-                            one.inbyway = 1
-                            one.cook = self.fid
-                            one.cookname = self.name
-                            return one            
-            return None
-
-    def select_byway(self):
-        global tables
-        self.byway = []
-        if self.current is None:
-            return
-        did = self.current.did
-        for table in self.queue:
-            for one in table.left:
-                if one.did == did and one.inbyway == 0:
-                    one.inbyway = 1
-                    self.byway.append(one)
-                    one.cook = self.fid
-                    one.cookname = self.name
-                    if len(self.byway) >= 2:
-                        return
-
-    def cash_delete(self, one):
-        if not isinstance(one, Order):
-            return
-        if one.status == 'left' and one.inbyway ==1:
-            self.ins(['remove', one.uid])
-
-    def to_dict(self):
-        if self.current is None:
-            cur = ''
-        else:
-            cur = self.current.to_dict()
-        result = {'fid': self.fid, 'name': self.name, 'current': cur, 'stamp': self.stamp, 'cookdo': self.cookdo,
-                  'byway': [one.to_dict() for one in self.byway],
-                  'doing': [one.to_dict() for one in self.doing],
-                  'done': [one.to_dict() for one in self.done]}
-        return result
-
-    def set_future(self):
-        self.stamp = time.time()
-        result = self.to_dict()
-        for future in self.waiters:
-            future.set_result(result)
-        self.waiters = set()
-
-    def update(self, stamp):
-        future = Future()
-        if stamp < self.stamp:
-            result = self.to_dict()
-            future.set_result(result)
-        else:
-            self.waiters.add(future)
-        return future
     
 class Waiter(object):
     def __init__(self, fid):

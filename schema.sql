@@ -16,7 +16,13 @@ base    float(8,2) not null,
 cid     char(20) not null,
 who     char(10) not null,
 pic     char(100),
-desp    varchar(1000)
+desp    varchar(1000),
+printer char(50)
+);
+
+create table if not exists printers(
+name    char(50) not null primary key,
+ip      char(50) not null
 );
 
 create table if not exists id (

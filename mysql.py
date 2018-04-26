@@ -5,7 +5,7 @@ HOST = 'localhost'
 PORT = 3306
 USER = 'artoftime'
 PASSWD = 'artoftime'
-DB = 'artoftime'
+DB = 'artoftime2'
 
 
 #row is dict

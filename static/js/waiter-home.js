@@ -49,7 +49,7 @@ $(document).ready(function(){
 });
 function show() {
     $('.receive .num').text(window.receive);
-    $('.pass .num').text(window.pass);
+    
     $('.feedback .num').text(window.feedback);
     $('.request .num').text(window.request);
     $('.clean .num').text(window.clean);
@@ -75,7 +75,7 @@ var updater = {
     },
     onSuccess: function(response){
         window.receive = response.message.receive;
-        window.pass = response.message.pass;
+        
         window.feedback = response.message.feedback;
         window.request = response.message.request;
         window.clean = response.message.clean;

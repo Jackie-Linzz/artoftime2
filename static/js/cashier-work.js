@@ -102,31 +102,13 @@ function Item(data) {
 function show_content() {
 
     var left = myorder.left;
-    var doing = myorder.doing;
-    var done = myorder.done;
+    
 
 
     $('.one').remove();
     var num = 0;
     var total = 0;
-    for(i in done) {
-	    var one = done[i]
-	    num += one.num;
-	    total += one.price * one.num;
-	    var item = Item(one);
-	    item.find('.name').text(one.name+'(done)');
-	    item.find('.button').remove();
-	    $('.total').before(item);
-    }
-    for(i in doing) {
-	    var one = doing[i]
-	    num += one.num;
-	    total += one.price * one.num;
-	    var item = Item(one);
-	    item.find('.name').text(one.name+'(doing)');
-	    item.find('.button').remove();
-	    $('.total').before(item);
-    }
+    
     for(i in left) {
 	    var one = left[i]
 	    num += one.num;
