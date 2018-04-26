@@ -18,9 +18,7 @@ class EntryHandler(tornado.web.RequestHandler):
             response = {'status': 'ok'}
         else:
             response = {'status': 'error'}
-        table = logic.tables.get(desk)
-        if table is None:
-            logic.tables[desk] = logic.Table(desk)
+        
         self.write(json_encode(response))
 
 class FacultyLoginHandler(tornado.web.RequestHandler):

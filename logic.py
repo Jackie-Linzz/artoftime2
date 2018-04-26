@@ -27,6 +27,7 @@ waiters = {}
 desks = set()
 diet = {}
 category = {}
+printers = {}
 cook_do = {} #fid: set()
 global_uid = 0
 global_pid = 0
@@ -94,7 +95,7 @@ class Idle_desks(object):
         global tables
         self.desks = []
         for k, v in tables.items():
-            if len(v.left)+len(v.doing)+len(v.done) == 0:
+            if len(v.left) == 0:
                 self.desks.append({'desk': k, 'num': v.seats})
         self.desks.sort(key=lambda x: x['num'])
 
@@ -203,6 +204,9 @@ class Order(object):
         content = u'%s\t%s\t%s\n' % (self.name, self.num, self.price*self.num)
         result = bytes(content.encode('gb18030'))
         return result
+
+    def gprint(self):
+        pass
             
     def to_dict(self):
         result = {'uid': self.uid, 'did':self.did, 'name': self.name, 'desk': self.desk, 'price': self.price,
@@ -385,7 +389,7 @@ def customer_ins(desk, ins):
             add_pid()
         for one in table.orders:
             one.status = 'left'
-            one.print()
+            one.gprint()
         table.left = table.left + table.orders
         table.orders = []
         table.left = sorted(table.left, key=lambda one: one.ord)
@@ -448,7 +452,7 @@ def waiter_ins(desk, ins):
             add_pid()
         for one in table.orders:
             one.status = 'left'
-            one.print()
+            one.gprint()
         table.left = table.left + table.orders
         table.orders = []
         table.left = sorted(table.left, key=lambda one: one.ord)

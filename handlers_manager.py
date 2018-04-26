@@ -243,6 +243,55 @@ class ManagerDeskShowHandler(tornado.web.RequestHandler):
         response = {'status': 'ok', 'desks': desks}
         self.write(json_encode(response))
 
+class ManagerPrinterHandler(tornado.web.RequestHandler):
+    def get(self):
+        role = self.get_cookie('role')
+        if role != 'manager':
+            return
+        self.render('manager-printer.html')
+
+class ManagerPrinterAddHandler(tornado.web.RequestHandler):
+    def post(self):
+        name = self.get_argument('name')
+        
+        ip = self.get_argument('ip')
+        result = mysql.insert('printers', {'name': name, 'ip': ip})
+        
+        if result:
+            #path = os.path.join(logic.data_dir, 'desks/' + desk)
+            #data = desk
+            #img = qrcode.make(data)
+            #img.save(path)
+            if name not in logic.printers:
+                logic.printers[name] = ip
+            
+            response = {'status': 'ok'}
+        else:
+            
+            response = {'status': 'error'}
+        self.write(json_encode(response))
+
+class ManagerPrinterDelHandler(tornado.web.RequestHandler):
+    def post(self):
+        printer = self.get_argument('printer')
+        result = mysql.delete('printers', {'name': printer})
+        
+        if result:
+            #path = os.path.join(logic.data_dir, 'desks/' + desk)
+            #os.remove(path)
+            if printer in logic.printers:
+                logic.printers.pop(printer)
+            response = {'status': 'ok'}
+        else:
+            response = {'status': 'error'}
+        self.write(json_encode(response))
+
+class ManagerPrinterShowHandler(tornado.web.RequestHandler):
+    def post(self):
+        printers = mysql.get_all('printers')
+        response = {'status': 'ok', 'printers': printers}
+        self.write(json_encode(response))
+
 class ManagerOrderHandler(tornado.web.RequestHandler):
     def get(self):
         role = self.get_cookie('role')
@@ -253,9 +302,9 @@ class ManagerOrderHandler(tornado.web.RequestHandler):
     def post(self):
         pid = self.get_argument('order')
         pid = int(pid)
-        sql = 'select order_history.uid as uid,diet.name as name,num,order_history.price as price,cook_history.fid as cook,cash_history.fid as cashier,status from cash_history,order_history,cook_history,diet where cash_history.uid=order_history.uid and order_history.uid=cook_history.uid and order_history.did=diet.did and order_history.pid=%s' % pid
+        sql = 'select order_history.uid as uid,diet.name as name,num,order_history.price as price,cash_history.fid as cashier,status from cash_history,order_history,diet where cash_history.uid=order_history.uid and order_history.did=diet.did and order_history.pid=%s' % pid
         result = mysql.query(sql)
-        print result
+        #print result
         result2 = mysql.get_all('faculty')
         faculty = {}
         for one in result2:
@@ -263,11 +312,10 @@ class ManagerOrderHandler(tornado.web.RequestHandler):
         total = 0
         for one in result:
             one['price'] = one['num'] * one['price']
-            one['cook'] = faculty[one['cook']]
-            one['cashier'] = faculty[one['cashier']]
+            
             if one['status'] == 'success':
                 total += one['price']
-        result.append({'name': '', 'num': 'all', 'price': total, 'cook': '', 'cashier': '', 'status': ''})
+        result.append({'name': '', 'num': 'all', 'price': total, 'status': ''})
         response = {'status': 'ok', 'pid': pid, 'items': result}
         self.write(json_encode(response))
         

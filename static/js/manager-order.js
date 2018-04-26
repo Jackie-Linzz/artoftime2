@@ -38,15 +38,13 @@ $(document).ready(function(){
 			                       '<td class="name">0001</td>'+
 			                       '<td class="num">0002</td>'+
 			                       '<td class="price">0003</td>'+
-			                       '<td class="cook">0004</td>'+
-                                   '<td class="cashier">0004</td>'+
+			                       
                                    '<td class="status">0004</td>'+
 			                       '</tr>');
                         tr.find('.name').text(one.name);
                         tr.find('.num').text(one.num);
                         tr.find('.price').text(one.price);
-                        tr.find('.cook').text(one.cook);
-                        tr.find('.cashier').text(one.cashier);
+                        
                         tr.find('.status').text(one.status);
                         p.append(tr);
 

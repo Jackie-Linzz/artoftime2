@@ -70,6 +70,8 @@ def sync():
     sync_uid()
     #desks and tables
     sync_tables()
+    #printers
+    sync_printers()
     #category
     sync_category()
     #diet
@@ -115,6 +117,12 @@ def sync_tables():
     for one in desks:
         logic.desks.add(one['desk'])
         logic.tables[one['desk']] = logic.Table(one['desk'])
+
+def sync_printers():
+    printers = mysql.get_all('printers')
+    logic.printers = {}
+    for one in printers:
+        logic.printers[one['name']] = one['ip']
 
 def sync_category():
     category = mysql.get_all('category')

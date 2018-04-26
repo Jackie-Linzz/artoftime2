@@ -19,6 +19,9 @@ $(document).ready(function(){
     $(document).on('click', '.desk', function(){
 	    window.location.replace('/manager-desk');
     });
+    $(document).on('click', '.printer', function(){
+	    window.location.replace('/manager-printer');
+    });
     $(document).on('click', '.order', function(){
         window.location.replace('/manager-order');
     });
